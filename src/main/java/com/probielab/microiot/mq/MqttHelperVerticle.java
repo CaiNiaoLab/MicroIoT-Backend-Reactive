@@ -3,7 +3,6 @@ package com.probielab.microiot.mq;
 import com.probielab.microiot.utils.reactivex.log4vertx;
 import com.sun.istack.Nullable;
 import io.netty.handler.codec.mqtt.MqttQoS;
-import io.reactivex.functions.Consumer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.mqtt.MqttClientOptions;
 import io.vertx.reactivex.core.AbstractVerticle;
@@ -18,7 +17,7 @@ public class MqttHelperVerticle extends AbstractVerticle {
   private final static String MQTT_SERVER_HOST = "0.0.0.0";
   private final static Integer MQTT_SERVER_PORT = 10010;
 
-  public final static String MQTT_QUEUE_NAME = "microiot.mqtt.queue";
+  public final static String CONFIG_MICRO_IOT_MQTT_QUEUE = "microiot.mqtt.queue";
 
   MessageConsumer<JsonObject> mqttConsumer;
 
@@ -41,7 +40,7 @@ public class MqttHelperVerticle extends AbstractVerticle {
       }
     });
 
-    mqttConsumer = eb.consumer(MQTT_QUEUE_NAME);
+    mqttConsumer = eb.consumer(CONFIG_MICRO_IOT_MQTT_QUEUE);
 
     mqttConsumer.completionHandler(res -> {
       if (res.succeeded()) {

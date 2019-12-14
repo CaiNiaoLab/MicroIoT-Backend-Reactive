@@ -3,6 +3,7 @@ package com.probielab.microiot;
 import com.probielab.microiot.api.HttpServerVerticle;
 import com.probielab.microiot.orm.SqlHelperVerticle;
 import com.probielab.microiot.mq.MqttHelperVerticle;
+import com.probielab.microiot.ws.WebsocketServer;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Promise;
@@ -19,17 +20,21 @@ public class MicroIoTLauncher extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) {
-    DeploymentOptions httpServerOptions = new DeploymentOptions();
-    httpServerOptions.setInstances(2);
-    vertx.deployVerticle(HttpServerVerticle.class, httpServerOptions);
+//    DeploymentOptions httpServerOptions = new DeploymentOptions();
+//    httpServerOptions.setInstances(2);
+//    vertx.deployVerticle(HttpServerVerticle.class, httpServerOptions);
+//
+//    DeploymentOptions sqlOptions = new DeploymentOptions();
+//    sqlOptions.setInstances(1);
+//    vertx.deployVerticle(SqlHelperVerticle.class, sqlOptions);
+//
+//    DeploymentOptions mqttOptions = new DeploymentOptions();
+//    sqlOptions.setInstances(1);
+//    vertx.deployVerticle(MqttHelperVerticle.class, mqttOptions);
 
-    DeploymentOptions sqlOptions = new DeploymentOptions();
-    sqlOptions.setInstances(1);
-    vertx.deployVerticle(SqlHelperVerticle.class, sqlOptions);
-
-    DeploymentOptions mqttOptions = new DeploymentOptions();
-    sqlOptions.setInstances(1);
-    vertx.deployVerticle(MqttHelperVerticle.class, mqttOptions);
+    DeploymentOptions wsOptions = new DeploymentOptions();
+    wsOptions.setInstances(1);
+    vertx.deployVerticle(WebsocketServer.class, wsOptions);
 
     EventBus eb = vertx.eventBus();
 

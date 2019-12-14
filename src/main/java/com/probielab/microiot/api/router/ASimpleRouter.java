@@ -1,9 +1,6 @@
 package com.probielab.microiot.api.router;
 
 import com.probielab.microiot.api.services.FrameworksService;
-import com.probielab.microiot.utils.reactivex.log4vertx;
-import io.vertx.core.eventbus.DeliveryOptions;
-import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.eventbus.EventBus;
 import io.vertx.reactivex.ext.web.Router;
