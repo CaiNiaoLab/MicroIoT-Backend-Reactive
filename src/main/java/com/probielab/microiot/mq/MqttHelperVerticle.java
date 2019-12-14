@@ -66,8 +66,6 @@ public class MqttHelperVerticle extends AbstractVerticle {
           });
       }
     });
-
-
   }
 
   private static Future<JsonObject> publishMessage(EventBus eb, MqttClient mqttClient, String topic, String message) {

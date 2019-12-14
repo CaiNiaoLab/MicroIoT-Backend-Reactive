@@ -13,9 +13,9 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
 
-public class MainVerticle extends AbstractVerticle {
+public class MicroIoTLauncher extends AbstractVerticle {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(MainVerticle.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(MicroIoTLauncher.class);
 
   @Override
   public void start(Promise<Void> startPromise) {

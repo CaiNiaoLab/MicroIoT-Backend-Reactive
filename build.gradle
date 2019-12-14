@@ -22,7 +22,7 @@ application {
 
 sourceCompatibility = '11'
 
-def mainVerticleName = 'com.probielab.microiot.MainVerticle'
+def mainVerticleName = 'com.probielab.microiot.MicroIoTLauncher'
 def watchForChange = 'src/**/*'
 def doOnChange = './gradlew classes'
 
