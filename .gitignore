@@ -185,6 +185,6 @@ nbdist/
 !.vscode/extensions.json
 /.idea/
 /gradle/wrapper/
-/.idea/
 /gradlew
 /gradlew.bat
+/build/

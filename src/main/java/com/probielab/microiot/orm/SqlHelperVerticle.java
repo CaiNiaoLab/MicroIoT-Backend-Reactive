@@ -3,7 +3,6 @@ package com.probielab.microiot.orm;
 import com.probielab.microiot.api.HttpServerVerticle;
 import com.probielab.microiot.utils.reactivex.log4vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
-import io.vertx.core.eventbus.impl.CodecManager;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.pgclient.PgConnectOptions;
@@ -29,7 +28,7 @@ public class SqlHelperVerticle extends AbstractVerticle {
   private MessageConsumer<JsonObject> sqlConsumer;
 
   @Override
-  public void start() throws Exception {
+  public void start() {
     PgConnectOptions connectOptions = new PgConnectOptions()
       .setPort(54321)
       .setHost("106.12.85.54")
@@ -74,8 +73,6 @@ public class SqlHelperVerticle extends AbstractVerticle {
       });
     });
 
-    sqlConsumer.completionHandler(res -> {
-      log4vertx.info(sqlEventBus, "Postgres SQL ready");
-    });
+    sqlConsumer.completionHandler(res -> log4vertx.info(sqlEventBus, "Postgres SQL ready"));
   }
 }
