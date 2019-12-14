@@ -8,7 +8,7 @@ import io.vertx.reactivex.core.eventbus.EventBus;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.handler.BodyHandler;
 
-import static com.probielab.microiot.api.HttpServerVerticle.CONFIG_MICRO_IOT_DB_QUEUE;
+import static com.probielab.microiot.orm.SqlHelperVerticle.CONFIG_MICRO_IOT_DB_QUEUE;
 
 public class ASimpleRouter {
   private static String DbQueue = "microiotdb.queue";

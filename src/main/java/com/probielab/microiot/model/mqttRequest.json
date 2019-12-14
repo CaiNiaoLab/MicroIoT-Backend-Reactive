@@ -1,0 +1,9 @@
+{
+  "username": "",
+  "userTopic": "",
+  "messageType": "",
+  "messageBody": "",
+  "messageOptions": {
+    "qos": 2
+  }
+}
