@@ -188,3 +188,4 @@ nbdist/
 /gradlew
 /gradlew.bat
 /build/classes/java/main/com/probielab/microiot/
+/build/classes/java/test/com/probielab/microiot/
