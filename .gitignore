@@ -189,3 +189,5 @@ nbdist/
 /gradlew.bat
 /build/classes/java/main/com/probielab/microiot/
 /build/classes/java/test/com/probielab/microiot/
+build/generated/
+src/main/java/com/probielab/microiot/event/
