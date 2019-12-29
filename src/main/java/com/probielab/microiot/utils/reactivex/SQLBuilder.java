@@ -1,9 +1,13 @@
-package com.probielab.microiot.utils;
+package com.probielab.microiot.utils.reactivex;
 
+import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.json.JsonObject;
 
 public class SQLBuilder {
-  public static String InsertFromJson(JsonObject jsonObject) {
+  public static Future<String> InsertFromJson(JsonObject jsonObject) {
+
+    Promise<String> promise = Promise.promise();
 
     StringBuilder queryStringBuilder = new StringBuilder();
     queryStringBuilder.append(jsonObject.getString("query"));
@@ -27,6 +31,7 @@ public class SQLBuilder {
     valuesStringBuilder.append(")");
 
     queryStringBuilder.append(setStringBuilder).append(valuesStringBuilder);
-    return queryStringBuilder.toString();
+    promise.complete(queryStringBuilder.toString());
+    return promise.future();
   }
 }

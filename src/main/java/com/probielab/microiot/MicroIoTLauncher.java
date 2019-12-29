@@ -21,13 +21,13 @@ public class MicroIoTLauncher extends AbstractVerticle {
   @Override
   public void start(Promise<Void> startPromise) {
 //    DeploymentOptions httpServerOptions = new DeploymentOptions();
-//    httpServerOptions.setInstances(2);
+//    httpServerOptions.setInstances(1);
 //    vertx.deployVerticle(HttpServerVerticle.class, httpServerOptions);
-//
-//    DeploymentOptions sqlOptions = new DeploymentOptions();
-//    sqlOptions.setInstances(1);
-//    vertx.deployVerticle(SqlHelperVerticle.class, sqlOptions);
-//
+
+    DeploymentOptions sqlOptions = new DeploymentOptions();
+    sqlOptions.setInstances(1);
+    vertx.deployVerticle(SqlHelperVerticle.class, sqlOptions);
+
 //    DeploymentOptions mqttOptions = new DeploymentOptions();
 //    sqlOptions.setInstances(1);
 //    vertx.deployVerticle(MqttHelperVerticle.class, mqttOptions);

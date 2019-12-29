@@ -1,6 +1,6 @@
 package com.probielab.microiot.api.services;
 
-import com.probielab.microiot.utils.SQLBuilder;
+import com.probielab.microiot.utils.reactivex.SQLBuilder;
 import com.probielab.microiot.utils.reactivex.log4vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.json.JsonObject;

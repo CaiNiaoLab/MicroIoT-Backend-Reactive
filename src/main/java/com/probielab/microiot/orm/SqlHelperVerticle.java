@@ -36,7 +36,7 @@ public class SqlHelperVerticle extends AbstractVerticle {
   public void start() {
     PgConnectOptions connectOptions = new PgConnectOptions()
       .setPort(54321)
-      .setHost("106.12.85.54")
+      .setHost("106.12.196.221")
       .setDatabase("postgres")
       .setUser("postgres")
       .setPassword("password");
