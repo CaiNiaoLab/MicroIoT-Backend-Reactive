@@ -60,7 +60,7 @@ public class SqlHelperVerticle extends AbstractVerticle {
           JsonArray resultSet = new JsonArray();
           RowIterator<Row> rowRowIterator = pg_res.result().iterator();
           rowRowIterator.forEachRemaining(v -> {
-            JsonObject framework_data = (JsonObject) v.getValue("framework_data");
+            String framework_data = v.getValue(1).toString();
             resultSet.add(framework_data);
           });
           result.put("data", resultSet);

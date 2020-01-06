@@ -22,9 +22,9 @@ public class MainVerticle extends AbstractVerticle {
     httpServerOptions.setInstances(2);
     vertx.deployVerticle(HttpServerVerticle.class, httpServerOptions);
 
-    DeploymentOptions sqlOptions = new DeploymentOptions();
-    sqlOptions.setInstances(2);
-    vertx.deployVerticle(SqlHelperVerticle.class, sqlOptions);
+//    DeploymentOptions sqlOptions = new DeploymentOptions();
+//    sqlOptions.setInstances(2);
+//    vertx.deployVerticle(SqlHelperVerticle.class, sqlOptions);
 
     EventBus eb = vertx.eventBus();
 
