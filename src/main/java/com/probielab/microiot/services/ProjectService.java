@@ -7,7 +7,7 @@ import io.vertx.reactivex.core.Promise;
 
 public class ProjectService extends BaseService {
   final String POST_APP = "INSERT INTO mi_project VALUES (generate_uuid(32), '";
-  final String GET_APP = "";
+  final String GET_APP = "SELECT project_data FROM mi_project where pid='${pid}'";
 
   final String GET_RETURN_ID = "') RETURNING pid";
 
@@ -21,5 +21,17 @@ public class ProjectService extends BaseService {
       }
     });
     return result.future();
+  }
+
+  public Future<String> getProject(String pid) {
+    Promise<String> promise = Promise.promise();
+    client.query(GET_APP.replace("${pid}", pid), res -> {
+      if (res.succeeded()) {
+        promise.complete(res.result().getDelegate().iterator().next().toString());
+      } else {
+        promise.fail(res.cause());
+      }
+    });
+    return promise.future();
   }
 }

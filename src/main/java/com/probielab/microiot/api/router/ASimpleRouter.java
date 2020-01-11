@@ -19,9 +19,16 @@ public class ASimpleRouter {
 
     EventBus eb = vertx.eventBus();
 
-    router.route("/data").handler(res -> {
+    router.route("/saveApplication").handler(res -> {
       ProjectService projectService = new ProjectService();
-      projectService.postProject("{\"name\":\"test\"}")
+      projectService.postProject(res.getBodyAsString())
+        .onSuccess(pg_res -> {
+          res.response().end(pg_res);
+        });
+    });
+    router.route("/loadApplication").handler(res -> {
+      ProjectService projectService = new ProjectService();
+      projectService.getProject(res.getBodyAsJson().getString("applicationId"))
         .onSuccess(pg_res -> {
           res.response().end(pg_res);
         });
