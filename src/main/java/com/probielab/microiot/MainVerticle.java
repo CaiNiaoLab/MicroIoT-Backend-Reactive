@@ -1,6 +1,7 @@
 package com.probielab.microiot;
 
 import com.probielab.microiot.api.HttpServerVerticle;
+import com.probielab.microiot.mq.MqttVerticle;
 import com.probielab.microiot.orm.SqlHelperVerticle;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
@@ -18,13 +19,13 @@ public class MainVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
-    DeploymentOptions httpServerOptions = new DeploymentOptions();
-    httpServerOptions.setInstances(2);
-    getVertx().deployVerticle(HttpServerVerticle.class, httpServerOptions);
+//    DeploymentOptions httpServerOptions = new DeploymentOptions();
+//    httpServerOptions.setInstances(0);
+//    getVertx().deployVerticle(HttpServerVerticle.class, httpServerOptions);
 
-//    DeploymentOptions sqlOptions = new DeploymentOptions();
-//    sqlOptions.setInstances(2);
-//    vertx.deployVerticle(SqlHelperVerticle.class, sqlOptions);
+    DeploymentOptions mqttOptions = new DeploymentOptions();
+    mqttOptions.setInstances(1);
+    vertx.deployVerticle(MqttVerticle.class, mqttOptions);
 
     EventBus eb = getVertx().eventBus();
 
