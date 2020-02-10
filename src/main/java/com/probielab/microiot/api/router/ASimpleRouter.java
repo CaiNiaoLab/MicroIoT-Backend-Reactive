@@ -1,5 +1,6 @@
 package com.probielab.microiot.api.router;
 
+import com.probielab.microiot.services.HardwareService;
 import com.probielab.microiot.services.ProjectService;
 import com.probielab.microiot.utils.reactivex.log4vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
@@ -31,6 +32,17 @@ public class ASimpleRouter {
       projectService.getProject(res.getBodyAsJson().getString("applicationId"))
         .onSuccess(pg_res -> {
           res.response().end(pg_res);
+        });
+    });
+    router.route("/loadHardwareInfo").handler(res -> {
+      HardwareService hardwareService = new HardwareService();
+      hardwareService.getHardwareList("","")
+        .onSuccess(pg_res -> {
+          res.response().end(pg_res.toString());
+        })
+        .onFailure(pg_res -> {
+          res.response().end("failed");
+          log4vertx.error(eb, "hard msg fail", pg_res.getCause());
         });
     });
 

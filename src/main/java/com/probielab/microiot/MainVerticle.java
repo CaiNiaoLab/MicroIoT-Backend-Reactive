@@ -19,9 +19,9 @@ public class MainVerticle extends AbstractVerticle {
 
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
-//    DeploymentOptions httpServerOptions = new DeploymentOptions();
-//    httpServerOptions.setInstances(0);
-//    getVertx().deployVerticle(HttpServerVerticle.class, httpServerOptions);
+    DeploymentOptions httpServerOptions = new DeploymentOptions();
+    httpServerOptions.setInstances(1);
+    getVertx().deployVerticle(HttpServerVerticle.class, httpServerOptions);
 
     DeploymentOptions mqttOptions = new DeploymentOptions();
     mqttOptions.setInstances(1);

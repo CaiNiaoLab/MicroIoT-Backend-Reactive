@@ -7,4 +7,11 @@ public class UserService extends BaseService {
   final String GET_RETURN_ID = "') RETURNING pid";
 
 
+
+
+
+
+
+
+
 }
