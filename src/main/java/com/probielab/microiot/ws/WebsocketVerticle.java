@@ -47,7 +47,7 @@ public class WebsocketVerticle extends AbstractVerticle {
         }
         JsonObject res = (JsonObject) Json.decodeValue(handler.textData());
         log4vertx.info(eb, "[Websocket RES]" + res.encode());
-        WebsocketRouter.wsRoute(handler);
+        WebsocketRouter.wsRoute(webSocket, handler, connectionMap);
       });
 
       webSocket.closeHandler(handler -> connectionMap.remove(id));
