@@ -4,6 +4,7 @@ import com.probielab.microiot.services.HardwareService;
 import com.probielab.microiot.services.ProjectService;
 import com.probielab.microiot.utils.reactivex.log4vertx;
 import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.http.impl.WebSocketRequestHandler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.core.eventbus.EventBus;
@@ -21,22 +22,21 @@ public class ASimpleRouter {
     EventBus eb = vertx.eventBus();
 
     router.route("/saveApplication").handler(res -> {
-      ProjectService projectService = new ProjectService();
-      projectService.postProject(res.getBodyAsString())
+      ProjectService.getInstance().postProject(res.getBodyAsString())
         .onSuccess(pg_res -> {
           res.response().end(pg_res);
         });
     });
+
     router.route("/loadApplication").handler(res -> {
-      ProjectService projectService = new ProjectService();
-      projectService.getProject(res.getBodyAsJson().getString("applicationId"))
+      ProjectService.getInstance().getProject(res.getBodyAsJson().getString("applicationId"))
         .onSuccess(pg_res -> {
           res.response().end(pg_res);
         });
     });
+
     router.route("/loadHardwareInfo").handler(res -> {
-      HardwareService hardwareService = new HardwareService();
-      hardwareService.getHardwareList("","")
+      HardwareService.getInstance().getHardwareList("", "")
         .onSuccess(pg_res -> {
           res.response().end(pg_res.toString());
         })
@@ -45,6 +45,8 @@ public class ASimpleRouter {
           log4vertx.error(eb, "hard msg fail", pg_res.getCause());
         });
     });
+
+    router.route("/sock").handler(SockJSRouter.getInstance(vertx).getSockJSHandler());
 
     return router;
   }

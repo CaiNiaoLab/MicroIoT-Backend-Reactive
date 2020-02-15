@@ -6,6 +6,7 @@ import io.vertx.reactivex.pgclient.PgPool;
 import io.vertx.sqlclient.PoolOptions;
 
 public abstract class BaseService {
+
   PgConnectOptions connectOptions = new PgConnectOptions()
     .setPort(54321)
     .setHost("106.12.196.221")

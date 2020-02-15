@@ -16,6 +16,15 @@ public class HardwareService extends BaseService {
   final String GET_HARDWARE_LIST_TEST = "SELECT * FROM mi_hardware";
 
 
+  private static HardwareService hardwareService;
+
+  public static HardwareService getInstance() {
+    if (hardwareService == null) {
+      hardwareService = new HardwareService();
+    }
+    return hardwareService;
+  }
+
   public Future<String> createHardware(String json, String uid) {
     Promise<String> promise = Promise.promise();
     client.query(POST_HARDWARE_LIST.replace("${json}", json).replace("${uid}", uid), res -> {

@@ -11,6 +11,15 @@ public class ProjectService extends BaseService {
 
   final String GET_RETURN_ID = "') RETURNING pid";
 
+  private static ProjectService projectService;
+
+  public static ProjectService getInstance() {
+    if (projectService == null) {
+      projectService = new ProjectService();
+    }
+    return projectService;
+  }
+
   public Future<String> postProject(String json) {
     Promise<String> result = Promise.promise();
     client.query(POST_APP + json + GET_RETURN_ID, res -> {

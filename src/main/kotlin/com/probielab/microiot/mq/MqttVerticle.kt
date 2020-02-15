@@ -73,13 +73,8 @@ class MqttVerticle : AbstractVerticle() {
     mqttClient?.connect(MQTT_SERVER_PORT, MQTT_SERVER_HOST) { res: AsyncResult<MqttConnAckMessage?> ->
       if (res.succeeded()) {
         mqttClient!!
-          .publishHandler {
-          if (it.topicName() == "/vertex/0") {
-            val hd = HardwareService();
-            hd.createHardware(it.payload().toString(), "MncWP0jkui3SJIlifUFbYho4Olv0pioC")
-          }
-          log4vertx.info(eb, it.payload().toString())
-        }.subscribe("/vertex/0", 0)
+          .publishHandler { MqttRouter.mqttEventSwitcher(it) }
+          .subscribe("/vertex/0", 0)
           .subscribe("/cc3200/ToggleLEDCmdL2", 0)
         log4vertx.info(eb, "MQTT connected! Host" + MQTT_SERVER_HOST + " Port:" + MQTT_SERVER_PORT + " ClientId:" + mqttClientOptions.clientId)
       } else {
