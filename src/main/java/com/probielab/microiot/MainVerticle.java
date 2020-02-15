@@ -3,6 +3,8 @@ package com.probielab.microiot;
 import com.probielab.microiot.api.HttpServerVerticle;
 import com.probielab.microiot.mq.MqttVerticle;
 import com.probielab.microiot.orm.SqlHelperVerticle;
+import com.probielab.microiot.redis.RedisVerticle;
+import com.probielab.microiot.ws.WebsocketVerticle;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Promise;
@@ -22,10 +24,12 @@ public class MainVerticle extends AbstractVerticle {
     DeploymentOptions httpServerOptions = new DeploymentOptions();
     httpServerOptions.setInstances(1);
     getVertx().deployVerticle(HttpServerVerticle.class, httpServerOptions);
+    getVertx().deployVerticle(WebsocketVerticle.class, httpServerOptions);
 
     DeploymentOptions mqttOptions = new DeploymentOptions();
     mqttOptions.setInstances(1);
     vertx.deployVerticle(MqttVerticle.class, mqttOptions);
+    vertx.deployVerticle(RedisVerticle.class, mqttOptions);
 
     EventBus eb = getVertx().eventBus();
 

@@ -1,5 +1,6 @@
 package com.probielab.microiot.api.router;
 
+import com.probielab.microiot.utils.reactivex.log4vertx;
 import io.vertx.ext.web.handler.sockjs.SockJSHandlerOptions;
 import io.vertx.reactivex.core.Vertx;
 import io.vertx.reactivex.ext.web.handler.sockjs.SockJSHandler;
@@ -18,6 +19,7 @@ public class SockJSRouter {
   private SockJSRouter(Vertx vertx) {
     SockJSHandlerOptions options = new SockJSHandlerOptions().setHeartbeatInterval(2000);
     sockJSHandler = SockJSHandler.create(vertx, options);
+    init(sockJSHandler);
   }
 
   public SockJSHandler getSockJSHandler() {

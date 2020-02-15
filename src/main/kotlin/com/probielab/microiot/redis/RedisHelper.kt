@@ -13,25 +13,26 @@ class RedisHelper {
     private lateinit var redisHelper: RedisHelper;
     @JvmStatic
     fun getInstance(vertx: Vertx): RedisHelper {
-      if (redisHelper == null) {
-        redisHelper = RedisHelper(vertx)
-      }
+      redisHelper = RedisHelper(vertx)
       return redisHelper
     }
   }
 
-  private lateinit var redisClient: RedisClient
+  private var redisClient: RedisClient
 
   constructor(vertx: Vertx) {
     val redisOp = RedisOptions()
       .addEndpoint(SocketAddress.inetSocketAddress(6379, "localhost"))
-    redisClient = RedisClient.create(vertx, redisOp.toJson());
+    this.redisClient = RedisClient.create(vertx, redisOp.toJson());
   }
 
   fun getValue(key: String, def: String): Future<String> {
     var promise = Promise.promise<String>()
     redisClient[key, {
       if (it.succeeded()) {
+        if (it.result() == null) {
+          promise.complete(def)
+        }
         promise.complete(it.result())
       } else {
         promise.complete(def)

@@ -73,9 +73,8 @@ class MqttVerticle : AbstractVerticle() {
     mqttClient?.connect(MQTT_SERVER_PORT, MQTT_SERVER_HOST) { res: AsyncResult<MqttConnAckMessage?> ->
       if (res.succeeded()) {
         mqttClient!!
-          .publishHandler { MqttRouter.mqttEventSwitcher(it) }
-          .subscribe("/vertex/0", 0)
-          .subscribe("/cc3200/ToggleLEDCmdL2", 0)
+          .publishHandler { MqttRouter.mqttEventSwitcher(it, eb) }
+          .subscribe("*", 0)
         log4vertx.info(eb, "MQTT connected! Host" + MQTT_SERVER_HOST + " Port:" + MQTT_SERVER_PORT + " ClientId:" + mqttClientOptions.clientId)
       } else {
         log4vertx.error(eb, "MQTT connect failed! Host" + MQTT_SERVER_HOST + " Port:" + MQTT_SERVER_PORT + " ClientId:" + mqttClientOptions.clientId, res.cause())
