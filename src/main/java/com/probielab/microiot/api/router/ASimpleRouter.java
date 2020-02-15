@@ -1,5 +1,6 @@
 package com.probielab.microiot.api.router;
 
+import com.probielab.microiot.services.ComponentsService;
 import com.probielab.microiot.services.HardwareService;
 import com.probielab.microiot.services.ProjectService;
 import com.probielab.microiot.utils.reactivex.log4vertx;
@@ -33,27 +34,45 @@ public class ASimpleRouter {
       .allowedMethods(allow));
 
     router.route("/saveApplication").handler(res -> {
-      ProjectService.getInstance().postProject(res.getBodyAsString())
+      ProjectService.getInstance(vertx).postProject(res.getBodyAsString())
         .onSuccess(pg_res -> {
           res.response().end(pg_res);
         });
     });
 
     router.route("/loadApplication").handler(res -> {
-      ProjectService.getInstance().getProject(res.getBodyAsJson().getString("applicationId"))
+      ProjectService.getInstance(vertx).getProject(res.getBodyAsJson().getString("applicationId"))
         .onSuccess(pg_res -> {
           res.response().end(pg_res);
         });
     });
 
     router.route("/loadHardwareInfo").handler(res -> {
-      HardwareService.getInstance().getHardwareList("", "")
+      HardwareService.getInstance(vertx).getHardwareList("", "")
         .onSuccess(pg_res -> {
           res.response().end(new JsonObject().put("data", pg_res).encode());
         })
         .onFailure(pg_res -> {
           res.response().end(new JsonObject().put("data", "").encode());
           log4vertx.error(eb, "hard msg fail", pg_res.getCause());
+        });
+    });
+
+    router.route("/loadComponent").handler(res -> {
+      ComponentsService.getInstance(vertx).getComponent("", "be28f4f0d11242d09f061b4d3e876b93")
+        .onSuccess(pg_res -> {
+          res.response().end(new JsonObject().put("data", pg_res).encode());
+        })
+        .onFailure(pg_res -> {
+          res.response().end(new JsonObject().put("data", "").encode());
+          log4vertx.error(eb, "hard msg fail", pg_res.getCause());
+        });
+    });
+
+    router.route("/saveComponent").handler(res -> {
+      ComponentsService.getInstance(vertx).createComponent("MncWP0jkui3SJIlifUFbYho4Olv0pioC", "be28f4f0d11242d09f061b4d3e876b93", res.getBodyAsJson().encode())
+        .onSuccess(pg_res -> {
+          res.response().end(pg_res);
         });
     });
 

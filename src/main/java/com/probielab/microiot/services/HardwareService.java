@@ -18,9 +18,13 @@ public class HardwareService extends BaseService {
 
   private static HardwareService hardwareService;
 
-  public static HardwareService getInstance() {
+  public HardwareService(Vertx vertx) {
+    super(vertx);
+  }
+
+  public static HardwareService getInstance(Vertx vertx) {
     if (hardwareService == null) {
-      hardwareService = new HardwareService();
+      hardwareService = new HardwareService(vertx);
     }
     return hardwareService;
   }
@@ -49,7 +53,6 @@ public class HardwareService extends BaseService {
           resultItem.put(res_row.getColumnName(1), res_row.getValue(1));
           resultArray.add(resultItem);
         });
-        System.out.println(resultArray);
         promise.complete(resultArray);
       } else {
         promise.fail(res.cause());

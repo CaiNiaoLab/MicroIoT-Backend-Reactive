@@ -32,8 +32,9 @@ class RedisHelper {
       if (it.succeeded()) {
         if (it.result() == null) {
           promise.complete(def)
+        } else {
+          promise.complete(it.result())
         }
-        promise.complete(it.result())
       } else {
         promise.complete(def)
       }

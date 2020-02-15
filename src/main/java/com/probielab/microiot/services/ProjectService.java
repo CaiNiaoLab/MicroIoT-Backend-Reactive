@@ -3,19 +3,25 @@ package com.probielab.microiot.services;
 import com.probielab.microiot.utils.reactivex.log4vertx;
 import io.vertx.reactivex.core.Future;
 import io.vertx.reactivex.core.Promise;
+import io.vertx.reactivex.core.Vertx;
 
 
 public class ProjectService extends BaseService {
   final String POST_APP = "INSERT INTO mi_project VALUES (generate_uuid(32), '";
   final String GET_APP = "SELECT project_data FROM mi_project where pid='${pid}'";
+  final String GET_APP_ALL = "SELECT * FROM mi_project where uid='${uid}'";
 
   final String GET_RETURN_ID = "') RETURNING pid";
 
   private static ProjectService projectService;
 
-  public static ProjectService getInstance() {
+  public ProjectService(Vertx vertx) {
+    super(vertx);
+  }
+
+  public static ProjectService getInstance(Vertx vertx) {
     if (projectService == null) {
-      projectService = new ProjectService();
+      projectService = new ProjectService(vertx);
     }
     return projectService;
   }

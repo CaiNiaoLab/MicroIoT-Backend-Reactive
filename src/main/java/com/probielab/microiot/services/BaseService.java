@@ -17,7 +17,10 @@ public abstract class BaseService {
   // Pool options
   PoolOptions poolOptions = new PoolOptions()
     .setMaxSize(10);
+  PgPool client;
 
   // Create the pooled client
-  PgPool client = PgPool.pool(Vertx.vertx(), connectOptions, poolOptions);
+  public BaseService(Vertx vertx) {
+    client = PgPool.pool(vertx, connectOptions, poolOptions);
+  }
 }
