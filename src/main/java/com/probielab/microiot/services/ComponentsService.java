@@ -10,7 +10,7 @@ public class ComponentsService extends BaseService {
   final static String GET_COMPONENT = "SELECT * FROM mi_component WHERE pid='${pid}'";
   final static String POST_COMPONENT = "INSERT INTO mi_component VALUES (generate_uuid(32), '${json}','${pid}'";
   final String GET_RETURN_ID = "') RETURNING pid";
-
+  final static String GET_COMPONENT_DETAIL = "SELECT * FROM mi_component WHERE cid='${cid}'";
 
   public ComponentsService(Vertx vertx) {
     super(vertx);
@@ -49,6 +49,18 @@ public class ComponentsService extends BaseService {
     Promise<String> promise = Promise.promise();
     client.query(POST_COMPONENT.replace("${json}", json)
       .replace("${pid}", pid) + GET_RETURN_ID, res -> {
+      if (res.succeeded()) {
+        promise.complete(res.result().getDelegate().iterator().next().toString());
+      } else {
+        promise.fail(res.cause());
+      }
+    });
+    return promise.future();
+  }
+
+  public Future<String> getComponentDetail(String cid) {
+    Promise<String> promise = Promise.promise();
+    client.query(GET_COMPONENT_DETAIL.replace("${cid}", cid), res -> {
       if (res.succeeded()) {
         promise.complete(res.result().getDelegate().iterator().next().toString());
       } else {
