@@ -18,6 +18,9 @@ class RedisVerticle : AbstractVerticle() {
       log4vertx.info(eb, "[REDIS SET]" + it.body().encode())
       redis.setValue(it.body().getString("id"), it.body().getString("data"))
     }
+      .completionHandler() {
+        log4vertx.info(eb, "[REDIS SET] Ready!")
+      }
 
     eb.consumer<JsonObject>(REDIS_EVENT_GET) {
       redis.getValue(it.body().getString("key"), "{}")
@@ -25,5 +28,8 @@ class RedisVerticle : AbstractVerticle() {
           it.reply(redis_res.result())
         }
     }
+      .completionHandler() {
+        log4vertx.info(eb, "[REDIS GET] Ready!")
+      }
   }
 }

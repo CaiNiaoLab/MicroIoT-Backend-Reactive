@@ -58,7 +58,7 @@ class MqttVerticle : AbstractVerticle() {
         .put("name", "Control")
         .put("desc", "Downlink")
         .put("type", "bool")
-        .put("data", "0")
+        .put("data", "1")
     }
   }
 
@@ -76,7 +76,10 @@ class MqttVerticle : AbstractVerticle() {
       if (res.succeeded()) {
         mqttClient!!
           .publishHandler { MqttRouter.mqttEventSwitcher(it, vertx) }
-          .subscribe("*", 0)
+          .subscribe("#", 0)
+          .pingResponseHandler {
+            log4vertx.info(eb, "[MQTT PING] ping!")
+          }
         log4vertx.info(eb, "MQTT connected! Host" + MQTT_SERVER_HOST + " Port:" + MQTT_SERVER_PORT + " ClientId:" + mqttClientOptions.clientId)
       } else {
         log4vertx.error(eb, "MQTT connect failed! Host" + MQTT_SERVER_HOST + " Port:" + MQTT_SERVER_PORT + " ClientId:" + mqttClientOptions.clientId, res.cause())

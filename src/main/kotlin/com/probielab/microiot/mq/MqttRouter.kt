@@ -2,6 +2,7 @@ package com.probielab.microiot.mq
 
 import com.probielab.microiot.redis.RedisVerticle
 import com.probielab.microiot.services.HardwareService
+import com.probielab.microiot.utils.reactivex.log4vertx
 import io.vertx.core.buffer.Buffer
 import io.vertx.core.json.JsonObject
 import io.vertx.reactivex.core.Vertx
@@ -22,8 +23,11 @@ class MqttRouter {
         }
         //测试
         "/cc3200/ToggleLEDCmdL2" -> {
-          eb.publish(RedisVerticle.REDIS_EVENT, JsonObject().put("id", "test")
-            .put("data", it.payload()))
+          log4vertx.info(eb, "[MQTT RES]" + it.payload().toString())
+          eb.publish(RedisVerticle.REDIS_EVENT,
+            JsonObject()
+              .put("id", "test")
+              .put("data", it.payload().toString()))
           //存到redis 硬件id_服务名
         }
       }
