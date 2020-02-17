@@ -58,7 +58,7 @@ class MqttVerticle : AbstractVerticle() {
         .put("name", "Control")
         .put("desc", "Downlink")
         .put("type", "bool")
-        .put("data", "1")
+        .put("data", true)
     }
   }
 
@@ -78,6 +78,7 @@ class MqttVerticle : AbstractVerticle() {
           .publishHandler { MqttRouter.mqttEventSwitcher(it, vertx) }
           .subscribe("#", 0)
           .pingResponseHandler {
+            publishMessage(eb, mqttClient!!, "/cc3200/ToggleLEDCmdL2", entries.encode())
             log4vertx.info(eb, "[MQTT PING] ping!")
           }
         log4vertx.info(eb, "MQTT connected! Host" + MQTT_SERVER_HOST + " Port:" + MQTT_SERVER_PORT + " ClientId:" + mqttClientOptions.clientId)
