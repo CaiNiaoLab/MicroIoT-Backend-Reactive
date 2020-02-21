@@ -78,8 +78,7 @@ class MqttVerticle : AbstractVerticle() {
           .publishHandler { MqttRouter.mqttEventSwitcher(it, vertx) }
           .subscribe("#", 0)
           .pingResponseHandler {
-            publishMessage(eb, mqttClient!!, "/cc3200/ToggleLEDCmdL2", entries.encode())
-            log4vertx.info(eb, "[MQTT PING] ping!")
+            //删除测试代码
           }
         log4vertx.info(eb, "MQTT connected! Host" + MQTT_SERVER_HOST + " Port:" + MQTT_SERVER_PORT + " ClientId:" + mqttClientOptions.clientId)
       } else {

@@ -22,14 +22,17 @@ public class MainVerticle extends AbstractVerticle {
   @Override
   public void start(Promise<Void> startPromise) throws Exception {
     DeploymentOptions httpServerOptions = new DeploymentOptions();
-    httpServerOptions.setInstances(1);
+    httpServerOptions.setInstances(2);
     getVertx().deployVerticle(HttpServerVerticle.class, httpServerOptions);
     getVertx().deployVerticle(WebsocketVerticle.class, httpServerOptions);
 
+    //模拟分布式
     DeploymentOptions mqttOptions = new DeploymentOptions();
-    mqttOptions.setInstances(1);
+    mqttOptions.setInstances(2);
     vertx.deployVerticle(MqttVerticle.class, mqttOptions);
     vertx.deployVerticle(RedisVerticle.class, mqttOptions);
+    //启动SQL源
+    vertx.deployVerticle(SqlHelperVerticle.class, mqttOptions);
 
     EventBus eb = getVertx().eventBus();
 

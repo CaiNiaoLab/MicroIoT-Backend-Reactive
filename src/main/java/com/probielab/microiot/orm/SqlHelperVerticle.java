@@ -41,7 +41,7 @@ public class SqlHelperVerticle extends AbstractVerticle {
       .setMaxSize(10);
 
     // Create the pooled client
-    PgPool client = PgPool.pool(Vertx.vertx(), connectOptions, poolOptions);
+    PgPool client = PgPool.pool(vertx, connectOptions, poolOptions);
 
     EventBus sqlEventBus = vertx.eventBus();
 

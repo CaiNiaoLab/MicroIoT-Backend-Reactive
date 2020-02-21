@@ -23,7 +23,7 @@ class RedisVerticle : AbstractVerticle() {
       }
 
     eb.consumer<JsonObject>(REDIS_EVENT_GET) {
-      redis.getValue(it.body().getString("key"), "{}")
+      redis.getValue(it.body().getString("key"), "NaN")
         .onComplete { redis_res ->
           it.reply(redis_res.result())
         }

@@ -21,12 +21,12 @@ class MqttRouter {
           val hardwareInfo = JsonObject(Buffer.buffer(it.toString()))
           HardwareService.getInstance(vertx).createHardware(hardwareInfo.encode(), "")
         }
-        //测试
-        "/cc3200/ToggleLEDCmdL2" -> {
+        //测试 作为Route点
+        "/MncWP0jkui3SJIlifUFbYho4Olv0pioC/fNap4m6c3j0E2muLav9D7XhV2XH9LdI1/cc3200/ToggleLEDCmdL2" -> {
           log4vertx.info(eb, "[MQTT RES]" + it.payload().toString())
           eb.publish(RedisVerticle.REDIS_EVENT,
             JsonObject()
-              .put("id", "test")
+              .put("id", it.topicName())
               .put("data", it.payload().toString()))
           //存到redis 硬件id_服务名
         }
