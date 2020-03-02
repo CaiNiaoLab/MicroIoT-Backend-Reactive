@@ -22,7 +22,7 @@ class RedisHelper {
 
   constructor(vertx: Vertx) {
     val redisOp = RedisOptions()
-      .addEndpoint(SocketAddress.inetSocketAddress(6379, "localhost"))
+      .addEndpoint(SocketAddress.inetSocketAddress(6379, "106.12.196.221"))
     this.redisClient = RedisClient.create(vertx, redisOp.toJson());
   }
 
