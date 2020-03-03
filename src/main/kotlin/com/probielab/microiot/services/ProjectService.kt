@@ -1,52 +1,48 @@
-package com.probielab.microiot.services;
+package com.probielab.microiot.services
 
-import com.probielab.microiot.utils.reactivex.log4vertx;
-import io.vertx.reactivex.core.Future;
-import io.vertx.reactivex.core.Promise;
-import io.vertx.reactivex.core.Vertx;
+import io.vertx.core.AsyncResult
+import io.vertx.reactivex.core.Future
+import io.vertx.reactivex.core.Promise
+import io.vertx.reactivex.core.Vertx
+import io.vertx.reactivex.sqlclient.Row
+import io.vertx.reactivex.sqlclient.RowSet
 
-
-public class ProjectService extends BaseService {
-  final String POST_APP = "INSERT INTO mi_project VALUES (generate_uuid(32), '";
-  final String GET_APP = "SELECT project_data FROM mi_project where pid='${pid}'";
-  final String GET_APP_ALL = "SELECT * FROM mi_project where uid='${uid}'";
-
-  final String GET_RETURN_ID = "') RETURNING pid";
-
-  private static ProjectService projectService;
-
-  public ProjectService(Vertx vertx) {
-    super(vertx);
-  }
-
-  public static ProjectService getInstance(Vertx vertx) {
-    if (projectService == null) {
-      projectService = new ProjectService(vertx);
+class ProjectService(vertx: Vertx?) : BaseService(vertx) {
+  val POST_APP = "INSERT INTO mi_project VALUES (generate_uuid(32), '"
+  val GET_APP = "SELECT project_data FROM mi_project where pid='\${pid}'"
+  val GET_APP_ALL = "SELECT * FROM mi_project where uid='\${uid}'"
+  val GET_RETURN_ID = "') RETURNING pid"
+  fun postProject(json: String): Future<String> {
+    val result = Promise.promise<String>()
+    client.query(POST_APP + json + GET_RETURN_ID) { res: AsyncResult<RowSet<Row?>> ->
+      if (res.succeeded()) {
+        result.complete(res.result().delegate.iterator().next().toString())
+      } else {
+        result.fail(res.cause())
+      }
     }
-    return projectService;
+    return result.future()
   }
 
-  public Future<String> postProject(String json) {
-    Promise<String> result = Promise.promise();
-    client.query(POST_APP + json + GET_RETURN_ID, res -> {
+  fun getProject(pid: String?): Future<String> {
+    val promise = Promise.promise<String>()
+    client.query(pid?.let { GET_APP.replace("\${pid}", it, ignoreCase = true) }) { res: AsyncResult<RowSet<Row?>> ->
       if (res.succeeded()) {
-        result.complete(res.result().getDelegate().iterator().next().toString());
+        promise.complete(res.result().delegate.iterator().next().toString())
       } else {
-        result.fail(res.cause());
+        promise.fail(res.cause())
       }
-    });
-    return result.future();
+    }
+    return promise.future()
   }
 
-  public Future<String> getProject(String pid) {
-    Promise<String> promise = Promise.promise();
-    client.query(GET_APP.replace("${pid}", pid), res -> {
-      if (res.succeeded()) {
-        promise.complete(res.result().getDelegate().iterator().next().toString());
-      } else {
-        promise.fail(res.cause());
+  companion object {
+    private var projectService: ProjectService? = null
+    fun getInstance(vertx: Vertx?): ProjectService? {
+      if (projectService == null) {
+        projectService = ProjectService(vertx)
       }
-    });
-    return promise.future();
+      return projectService
+    }
   }
 }

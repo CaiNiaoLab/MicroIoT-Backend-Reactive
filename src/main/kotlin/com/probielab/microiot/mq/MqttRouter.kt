@@ -19,7 +19,7 @@ class MqttRouter {
         "/vertex/0" -> {
           //硬件服务更新
           val hardwareInfo = JsonObject(Buffer.buffer(it.toString()))
-          HardwareService.getInstance(vertx).createHardware(hardwareInfo.encode(), "")
+          HardwareService.getInstance(vertx)?.createHardware(hardwareInfo.encode(), "")
         }
         //测试 作为Route点
         "/MncWP0jkui3SJIlifUFbYho4Olv0pioC/fNap4m6c3j0E2muLav9D7XhV2XH9LdI1/cc3200/ToggleLEDCmdL2" -> {

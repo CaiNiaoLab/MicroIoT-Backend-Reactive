@@ -1,26 +1,24 @@
-package com.probielab.microiot.services;
+package com.probielab.microiot.services
 
-import io.vertx.pgclient.PgConnectOptions;
-import io.vertx.reactivex.core.Vertx;
-import io.vertx.reactivex.pgclient.PgPool;
-import io.vertx.sqlclient.PoolOptions;
+import io.vertx.pgclient.PgConnectOptions
+import io.vertx.reactivex.core.Vertx
+import io.vertx.reactivex.pgclient.PgPool
+import io.vertx.sqlclient.PoolOptions
 
-public abstract class BaseService {
-
-  PgConnectOptions connectOptions = new PgConnectOptions()
+abstract class BaseService(vertx: Vertx?) {
+  var connectOptions = PgConnectOptions()
     .setPort(54321)
     .setHost("106.12.196.221")
     .setDatabase("postgres")
     .setUser("postgres")
-    .setPassword("password");
-
+    .setPassword("password")
   // Pool options
-  PoolOptions poolOptions = new PoolOptions()
-    .setMaxSize(10);
-  PgPool client;
+  var poolOptions = PoolOptions()
+    .setMaxSize(10)
+  var client: PgPool
 
   // Create the pooled client
-  public BaseService(Vertx vertx) {
-    client = PgPool.pool(vertx, connectOptions, poolOptions);
+  init {
+    client = PgPool.pool(vertx, connectOptions, poolOptions)
   }
 }

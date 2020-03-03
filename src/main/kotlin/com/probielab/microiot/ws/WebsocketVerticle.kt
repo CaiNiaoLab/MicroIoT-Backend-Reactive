@@ -1,60 +1,56 @@
-package com.probielab.microiot.ws;
+package com.probielab.microiot.ws
 
-import com.probielab.microiot.redis.RedisHelper;
-import com.probielab.microiot.utils.reactivex.log4vertx;
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
-import io.vertx.reactivex.core.AbstractVerticle;
-import io.vertx.reactivex.core.eventbus.EventBus;
-import io.vertx.reactivex.core.http.HttpServer;
-import io.vertx.reactivex.core.http.ServerWebSocket;
-import io.vertx.reactivex.ext.web.Router;
+import com.probielab.microiot.utils.reactivex.log4vertx
+import io.vertx.core.json.Json
+import io.vertx.core.json.JsonObject
+import io.vertx.reactivex.core.AbstractVerticle
+import io.vertx.reactivex.core.eventbus.EventBus
+import io.vertx.reactivex.core.http.HttpServer
+import io.vertx.reactivex.core.http.HttpServerRequest
+import io.vertx.reactivex.core.http.ServerWebSocket
+import io.vertx.reactivex.core.http.WebSocketFrame
+import io.vertx.reactivex.ext.web.Router
+import io.vertx.reactivex.ext.web.RoutingContext
+import java.util.*
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class WebsocketVerticle extends AbstractVerticle {
-  private Map<String, ServerWebSocket> connectionMap = new HashMap<>(16);
-
-  EventBus eb = vertx.eventBus();
-  @Override
-  public void start() {
-    HttpServer server = vertx.createHttpServer();
-
-    Router router = Router.router(vertx);
-
-    router.route("/").handler(routingContext -> {
-      routingContext.response().end();
-    });
-    websocketMethod(server);
-    server.requestHandler(router::accept).listen(8081);
+class WebsocketVerticle : AbstractVerticle() {
+  private val connectionMap: MutableMap<String, ServerWebSocket?> = HashMap(16)
+  var eb: EventBus = vertx.eventBus()
+  override fun start() {
+    val server = vertx.createHttpServer()
+    val router = Router.router(vertx)
+    router.route("/").handler {
+      it.response().end()
+    }
+    websocketMethod(server)
+    server.requestHandler {
+      router.handle(it)
+    }.listen(8081)
   }
 
-  public void websocketMethod(HttpServer server) {
-    server.websocketHandler(webSocket -> {
-      String id = webSocket.binaryHandlerID();
+  private fun websocketMethod(server: HttpServer) {
+    server.websocketHandler { webSocket: ServerWebSocket ->
+      val id = webSocket.binaryHandlerID()
       if (!checkID(id)) {
-        connectionMap.put(id, webSocket);
+        connectionMap[id] = webSocket
       }
-
-      webSocket.frameHandler(handler -> {
-        String currID = webSocket.binaryHandlerID();
-        for (Map.Entry<String, ServerWebSocket> entry : connectionMap.entrySet()) {
-          if (currID.equals(entry.getKey())) {
-            continue;
+      webSocket.frameHandler { handler: WebSocketFrame ->
+        val currID = webSocket.binaryHandlerID()
+        for ((key) in connectionMap) {
+          if (currID == key) {
+            continue
           }
           //do
         }
-        JsonObject res = (JsonObject) Json.decodeValue(handler.textData());
-        log4vertx.info(eb, "[Websocket RES]" + res.encode());
-        WebsocketRouter.wsRoute(webSocket, handler, connectionMap, vertx);
-      });
-
-      webSocket.closeHandler(handler -> connectionMap.remove(id));
-    });
+        val res = Json.decodeValue(handler.textData()) as JsonObject
+        log4vertx.info(eb, "[Websocket RES]" + res.encode())
+        WebsocketRouter.wsRoute(webSocket, handler, connectionMap, vertx)
+      }
+      webSocket.closeHandler { connectionMap.remove(id) }
+    }
   }
 
-  public boolean checkID(String id) {
-    return connectionMap.containsKey(id);
+  private fun checkID(id: String?): Boolean {
+    return connectionMap.containsKey(id)
   }
 }
