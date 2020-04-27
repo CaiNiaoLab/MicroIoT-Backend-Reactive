@@ -38,7 +38,7 @@ class SqlHelperVerticle : AbstractVerticle() {
     sqlConsumer = sqlEventBus.consumer(HttpServerVerticle.Companion.CONFIG_MICRO_IOT_DB_QUEUE)
     sqlConsumer?.handler { res: Message<JsonObject> ->
       log4vertx.info(sqlEventBus, "Postgres SQL handle a request from " + res.body().getString("query"))
-      client.query(res.body().getString("query")) { pg_res: AsyncResult<RowSet<Row>> ->
+      client.query(res.body().getString("query")).execute { pg_res: AsyncResult<RowSet<Row>> ->
         if (pg_res.failed()) {
           log4vertx.error(sqlEventBus, "Postgres SQL SELECT error", pg_res.cause())
         } else {

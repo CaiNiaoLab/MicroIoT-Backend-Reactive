@@ -17,7 +17,7 @@ class ComponentsService(vertx: Vertx?) : BaseService(vertx) {
     client.query(pid?.let {
       GET_COMPONENT
         .replace("\${pid}", it, ignoreCase = false)
-    }) { pg_res: AsyncResult<RowSet<Row>> ->
+    }).execute { pg_res: AsyncResult<RowSet<Row>> ->
       if (pg_res.succeeded()) {
         val resultArray = JsonArray()
         pg_res.result().forEach(Consumer { res_row: Row ->
@@ -43,7 +43,7 @@ class ComponentsService(vertx: Vertx?) : BaseService(vertx) {
       } else {
         return@let "NULL"
       }
-    }.toString() + GET_RETURN_ID) { res: AsyncResult<RowSet<Row?>> ->
+    }.toString() + GET_RETURN_ID).execute { res: AsyncResult<RowSet<Row?>> ->
       if (res.succeeded()) {
         promise.complete(res.result().delegate.iterator().next().toString())
       } else {
@@ -55,7 +55,7 @@ class ComponentsService(vertx: Vertx?) : BaseService(vertx) {
 
   fun getComponentDetail(cid: String?): Future<String> {
     val promise = Promise.promise<String>()
-    client.query(cid?.let { GET_COMPONENT_DETAIL.replace("\${cid}", it, ignoreCase = false) }) { res: AsyncResult<RowSet<Row?>> ->
+    client.query(cid?.let { GET_COMPONENT_DETAIL.replace("\${cid}", it, ignoreCase = false) }).execute { res: AsyncResult<RowSet<Row?>> ->
       if (res.succeeded()) {
         promise.complete(res.result().delegate.iterator().next().toString())
       } else {

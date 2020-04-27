@@ -17,7 +17,7 @@ class HardwareService(vertx: Vertx?) : BaseService(vertx) {
   val GET_HARDWARE_LIST_TEST = "SELECT * FROM mi_hardware"
   fun createHardware(json: String?, uid: String?): Future<String> {
     val promise = Promise.promise<String>()
-    client.query(json?.let { uid?.let { POST_HARDWARE_LIST.replace("\${json}", it, ignoreCase = false).replace("\${uid}", uid, ignoreCase = false) } }) { res: AsyncResult<RowSet<Row?>> ->
+    client.query(json?.let { uid?.let { POST_HARDWARE_LIST.replace("\${json}", it, ignoreCase = false).replace("\${uid}", uid, ignoreCase = false) } }).execute { res: AsyncResult<RowSet<Row?>> ->
       if (res.succeeded()) {
         promise.complete(res.result().delegate.iterator().next().toString())
       } else {
@@ -30,7 +30,7 @@ class HardwareService(vertx: Vertx?) : BaseService(vertx) {
   fun getHardwareList(uid: String?, token: String?): Future<JsonArray> {
     val promise = Promise.promise<JsonArray>()
     //GET_HARDWARE_LIST.replace("${uid}", uid);
-    client.query(GET_HARDWARE_LIST_TEST) { res: AsyncResult<RowSet<Row>> ->
+    client.query(GET_HARDWARE_LIST_TEST).execute { res: AsyncResult<RowSet<Row>> ->
       if (res.succeeded()) {
         val resultArray = JsonArray()
         res.result().forEach(Consumer { res_row: Row ->

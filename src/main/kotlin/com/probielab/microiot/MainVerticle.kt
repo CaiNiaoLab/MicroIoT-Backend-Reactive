@@ -16,16 +16,16 @@ class MainVerticle : AbstractVerticle() {
   @Throws(Exception::class)
   override fun start(startPromise: Promise<Void>) {
     val httpServerOptions = DeploymentOptions()
-    httpServerOptions.instances = 2
-    getVertx().deployVerticle(HttpServerVerticle::class.java, httpServerOptions)
-    getVertx().deployVerticle(WebsocketVerticle::class.java, httpServerOptions)
+    httpServerOptions.instances = 1
+    vertx.deployVerticle(HttpServerVerticle::class.java, httpServerOptions)
+    vertx.deployVerticle(WebsocketVerticle::class.java, httpServerOptions)
     //模拟分布式
     val mqttOptions = DeploymentOptions()
-    mqttOptions.instances = 2
+    mqttOptions.instances = 1
     vertx.deployVerticle(MqttVerticle::class.java, mqttOptions)
     vertx.deployVerticle(RedisVerticle::class.java, mqttOptions)
     //启动SQL源
-    vertx.deployVerticle(SqlHelperVerticle::class.java, mqttOptions)
+    //vertx.deployVerticle(SqlHelperVerticle::class.java, mqttOptions)
     val eb = getVertx().eventBus()
     val system = eb.consumer<JsonObject>("system")
     system.handler { res: Message<JsonObject> ->

@@ -14,7 +14,7 @@ class ProjectService(vertx: Vertx?) : BaseService(vertx) {
   val GET_RETURN_ID = "') RETURNING pid"
   fun postProject(json: String): Future<String> {
     val result = Promise.promise<String>()
-    client.query(POST_APP + json + GET_RETURN_ID) { res: AsyncResult<RowSet<Row?>> ->
+    client.query(POST_APP + json + GET_RETURN_ID).execute { res: AsyncResult<RowSet<Row?>> ->
       if (res.succeeded()) {
         result.complete(res.result().delegate.iterator().next().toString())
       } else {
@@ -26,7 +26,7 @@ class ProjectService(vertx: Vertx?) : BaseService(vertx) {
 
   fun getProject(pid: String?): Future<String> {
     val promise = Promise.promise<String>()
-    client.query(pid?.let { GET_APP.replace("\${pid}", it, ignoreCase = true) }) { res: AsyncResult<RowSet<Row?>> ->
+    client.query(pid?.let { GET_APP.replace("\${pid}", it, ignoreCase = true) }).execute { res: AsyncResult<RowSet<Row?>> ->
       if (res.succeeded()) {
         promise.complete(res.result().delegate.iterator().next().toString())
       } else {
